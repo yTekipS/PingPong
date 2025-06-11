@@ -1,5 +1,8 @@
 #include "raylib.h"
 
+int player1_score = 0;
+int player2_score = 0;
+int speed_choise[2] = {-1, 1};
 class Ball
 {
 public:
@@ -10,14 +13,28 @@ public:
         DrawCircle(x, y, radius, WHITE);
     }
 
+    void Reset()
+    {
+        x = GetScreenWidth() / 2;
+        y = GetScreenHeight() / 2;
+        x_speed *= speed_choise[GetRandomValue(0, 1)];
+        y_speed *= speed_choise[GetRandomValue(0, 1)];
+    }
+
     void Move()
     {
         x += x_speed;
         y += y_speed;
 
-        if (x + radius >= GetScreenWidth() || x - radius <= 0)
+        if (x + radius >= GetScreenWidth())
         {
-            x_speed *= -1;
+            player1_score++;
+            Reset();
+        }
+        if (x - radius <= 0)
+        {
+            player2_score++;
+            Reset();
         }
         if (y + radius >= GetScreenHeight() || y - radius <= 0)
         {
@@ -99,8 +116,10 @@ int main(void)
 
     ball.x = screenWidth / 2;
     ball.y = screenHeight / 2;
+    ball.x_speed *= speed_choise[GetRandomValue(0, 1)];
+    ball.y_speed *= speed_choise[GetRandomValue(0, 1)];
 
-    player1.x = 0;
+    player1.x = player1.width / 2;
     player1.y = screenHeight / 2 - player1.height / 2;
 
     player2.x = screenWidth - (player2.width * 1.5f);
@@ -117,11 +136,11 @@ int main(void)
         player1.Move();
         player2.Move();
 
-        if(CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{player1.x, player1.y, player1.width, player1.height}))
+        if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{player1.x, player1.y, player1.width, player1.height}))
         {
             ball.x_speed *= -1;
         }
-        if(CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{player2.x, player2.y, player2.width, player2.height}))
+        if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{player2.x, player2.y, player2.width, player2.height}))
         {
             ball.x_speed *= -1;
         }
@@ -136,6 +155,8 @@ int main(void)
             player1.Draw();
             player2.Draw();
             DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, GRAY);
+            DrawText(TextFormat("%i", player1_score), screenWidth / 4 + 20, 20, 100, WHITE);
+            DrawText(TextFormat("%i", player2_score), screenWidth / 4 + 20 + screenWidth / 2, 20, 100, WHITE);
         }
         EndDrawing();
         //----------------------------------------------------------------------------------
