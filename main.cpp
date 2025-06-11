@@ -1,8 +1,8 @@
 #include "raylib.h"
 
+bool lastTouch = false;
 int player1_score = 0;
 int player2_score = 0;
-int speed_choise[2] = {-1, 1};
 class Ball
 {
 public:
@@ -10,15 +10,13 @@ public:
     int y_speed = 9, x_speed = 9;
     void Draw()
     {
-        DrawCircle(x, y, radius, WHITE);
+        DrawCircle(x, y, radius, YELLOW);
     }
 
     void Reset()
     {
         x = GetScreenWidth() / 2;
         y = GetScreenHeight() / 2;
-        x_speed *= speed_choise[GetRandomValue(0, 1)];
-        y_speed *= speed_choise[GetRandomValue(0, 1)];
     }
 
     void Move()
@@ -52,7 +50,7 @@ public:
 
     void Draw()
     {
-        DrawRectangle(x, y, width, height, DARKBLUE);
+        DrawRectangle(x, y, width, height, WHITE);
     }
 
     void Limit()
@@ -88,7 +86,7 @@ class Player2 : public Player
 public:
     void Draw()
     {
-        DrawRectangle(x, y, width, height, DARKPURPLE);
+        DrawRectangle(x, y, width, height, WHITE);
     }
 
     void Move()
@@ -116,8 +114,6 @@ int main(void)
 
     ball.x = screenWidth / 2;
     ball.y = screenHeight / 2;
-    ball.x_speed *= speed_choise[GetRandomValue(0, 1)];
-    ball.y_speed *= speed_choise[GetRandomValue(0, 1)];
 
     player1.x = player1.width / 2;
     player1.y = screenHeight / 2 - player1.height / 2;
@@ -138,11 +134,15 @@ int main(void)
 
         if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{player1.x, player1.y, player1.width, player1.height}))
         {
-            ball.x_speed *= -1;
+            if (lastTouch)
+                ball.x_speed *= -1;
+            lastTouch = false;
         }
         if (CheckCollisionCircleRec(Vector2{ball.x, ball.y}, ball.radius, Rectangle{player2.x, player2.y, player2.width, player2.height}))
         {
-            ball.x_speed *= -1;
+            if (!lastTouch)
+                ball.x_speed *= -1;
+            lastTouch = true;
         }
         //----------------------------------------------------------------------------------
 
@@ -150,11 +150,13 @@ int main(void)
         //----------------------------------------------------------------------------------
         BeginDrawing();
         {
-            ClearBackground(BLACK);
+            ClearBackground(Color{38, 185, 154, 255});
+            DrawRectangle(0, 0, screenWidth / 2, screenHeight, Color{20, 160, 133, 255});
+            DrawLine((screenWidth / 2)-2, 0, (screenWidth / 2)+2, screenHeight, GRAY);
+            DrawCircle(screenWidth / 2, screenHeight / 2, screenHeight / 6, Color{167, 215, 190, 255});
             ball.Draw();
             player1.Draw();
             player2.Draw();
-            DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, GRAY);
             DrawText(TextFormat("%i", player1_score), screenWidth / 4 + 20, 20, 100, WHITE);
             DrawText(TextFormat("%i", player2_score), screenWidth / 4 + 20 + screenWidth / 2, 20, 100, WHITE);
         }
