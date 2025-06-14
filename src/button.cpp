@@ -1,6 +1,6 @@
 #include "button.hpp"
 
-Button::Button(const char* IMGpath, Vector2 IMGposition, float scale)
+Button::Button(const char *IMGpath, Vector2 IMGposition, float scale)
 {
     position = IMGposition;
     Image image = LoadImage(IMGpath);
@@ -8,7 +8,7 @@ Button::Button(const char* IMGpath, Vector2 IMGposition, float scale)
     int height = image.height;
 
     ImageResize(&image, width, height);
-    position.x -= width/2;
+    position.x -= width / 2;
     texture = LoadTextureFromImage(image);
     UnloadImage(image);
 }
@@ -26,7 +26,8 @@ void Button::Draw()
 bool Button::isPressed(bool mouseKeyPressed)
 {
     Rectangle rec = {position.x, position.y, static_cast<float>(texture.width), static_cast<float>(texture.height)};
-    if (CheckCollisionPointRec(GetMousePosition(), rec) && mouseKeyPressed){
+    if (CheckCollisionPointRec(GetMousePosition(), rec) && mouseKeyPressed)
+    {
         return true;
     }
     return false;

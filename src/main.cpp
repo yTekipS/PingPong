@@ -21,7 +21,6 @@ Colors colors;
 
 int main(void)
 {
-    bool isPaused;
     const int screenWidth = 1280;
     const int screenHeight = 720;
 
@@ -51,23 +50,21 @@ int main(void)
 
             case GAME:
             {
-                if (isPaused != true)
+
+                ball.Move();
+                player1.Move();
+                player2.Move();
+                if (ball.lastTouch)
                 {
-                    ball.Move();
-                    player1.Move();
-                    player2.Move();
-                    if (ball.lastTouch)
-                    {
-                        ball.Chcek(player1.positionX, player1.positionY, player1.width, player1.height);
-                    }
-                    if (!ball.lastTouch)
-                    {
-                        ball.Chcek(player2.positionX, player2.positionY, player2.width, player2.height);
-                    }
+                    ball.Chcek(player1.positionX, player1.positionY, player1.width, player1.height);
                 }
-                if ((pause.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE)) && isPaused != true)
+                if (!ball.lastTouch)
                 {
-                    isPaused = !isPaused;
+                    ball.Chcek(player2.positionX, player2.positionY, player2.width, player2.height);
+                }
+
+                if (pause.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE))
+                {
                     current_scene = PASUE;
                 }
             }
@@ -75,9 +72,8 @@ int main(void)
 
             case PASUE:
             {
-                if ((pause.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE)) && isPaused)
+                if (pause.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE))
                 {
-                    isPaused = !isPaused;
                     current_scene = GAME;
                 }
             }

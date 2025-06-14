@@ -38,7 +38,7 @@ void Player1::Limit()
 
 void Player2::GetPosition(float x, float y)
 {
-    this->positionX = x - width - width/3;
+    this->positionX = x - width - width / 3;
     this->positionY = y - height / 2;
 }
 
