@@ -7,9 +7,11 @@
             "args": [
                 "-fdiagnostics-color=always",
                 "-g",
-                "${file}",
+                "${workspaceFolder}\\src\\main.cpp",
+                "${workspaceFolder}\\src\\ball.cpp",
+                "${workspaceFolder}\\src\\player.cpp",
                 "-o",
-                "${fileDirname}\\${fileBasenameNoExtension}.exe",
+                "${workspaceFolder}\\out\\${fileBasenameNoExtension}.exe",
                 "-lraylib"    
             ],
             "options": {

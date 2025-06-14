@@ -4,5 +4,13 @@
 			"path": "."
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"system_error": "cpp",
+			"functional": "cpp",
+			"xstring": "cpp",
+			"format": "cpp",
+			"variant": "cpp"
+		}
+	}
 }
