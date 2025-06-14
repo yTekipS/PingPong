@@ -18,14 +18,17 @@ struct Colors
     Color DarkGreen{20, 160, 133, 255};
     Color LightGreen{129, 204, 184, 255};
     Color Yellow{243, 213, 91, 255};
+    Color Pause{255, 255, 255, 150};
+    Color Transparent{0, 0, 0, 150};
 };
 Colors colors;
 
 int main(void)
 {
-    const int screenWidth = 1280;
-    const int screenHeight = 720;
+    float screenWidth = 1280;
+    float screenHeight = 720;
 
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "Ping Pong Game"); // Initializing window
 
     SetTargetFPS(60);
@@ -36,6 +39,8 @@ int main(void)
     Player1 player1;
     Player2 player2;
     Button pause{"../Assets/Pause.png", Vector2{screenWidth / 2, 0}, 1};
+    Button resume;
+    Rectangle pasuseMenu{screenWidth * 0.3f, screenHeight / 8, screenWidth * 0.4f, screenHeight * 0.75f};
 
     // Setting up starting positions for both players
     player1.GetPosition(0, screenHeight / 2);
@@ -47,6 +52,23 @@ int main(void)
     {
         //* UPDATE
         {
+            //* HANDLING WINDOW RESIZING
+            if (IsWindowResized()) 
+            {
+                screenHeight = GetScreenHeight();
+                screenWidth = GetScreenWidth();
+                player1.GetPosition(0, screenHeight / 2);
+                player1.width = screenWidth / 28;
+                player1.height = screenHeight / 5;
+                player2.GetPosition(screenWidth, screenHeight / 2);
+                player2.width = screenWidth / 28;
+                player2.height = screenHeight / 5;
+                ball.radius = screenHeight / 24;
+                ball.positonX = screenWidth / 2;
+                ball.positonY = screenHeight / 2;
+                pause.position = Vector2{screenWidth / 2, 0};
+                pasuseMenu = {screenWidth * 0.3f, screenHeight / 8, screenWidth * 0.4f, screenHeight * 0.75f};
+            }
             switch (current_scene)
             {
             case MAINMENU: // MAINMENU scene
@@ -77,7 +99,7 @@ int main(void)
 
             case PASUE: // PASUE active
             {
-                if (pause.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE)) // chceking if pause button/key is pressed
+                if (resume.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE)) // chceking if pause button/key is pressed
                 {
                     current_scene = GAME;
                 }
@@ -110,7 +132,7 @@ int main(void)
                 player2.Draw();                                                                                        // drawing right player
                 DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
                 DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
-                pause.Draw();
+                pause.Draw();                                                                                          // draw pause button
             }
             break;
 
@@ -126,6 +148,11 @@ int main(void)
                 DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
                 DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
                 pause.Draw();
+                // draw pasue button
+                DrawRectangle(0, 0, screenWidth, screenHeight, colors.Transparent);
+                DrawRectangleRounded(pasuseMenu, 0.2f, 80, colors.Pause);
+                DrawText("Pause", screenWidth * 0.3f + (screenWidth * 0.4f) / 5, screenHeight / 8 + (screenHeight * 0.75) / 10, 100, WHITE);
+                resume.Draw_Text("Resume", screenWidth * 0.3f, screenHeight / 2.7f, 80, screenWidth * 0.4f, screenHeight / 9);
             }
             break;
 

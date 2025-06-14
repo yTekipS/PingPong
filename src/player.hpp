@@ -4,8 +4,9 @@
 class Player1
 {
 public:
-    const float speed = 10, width = GetScreenWidth() / 28, height = GetScreenHeight() / 5; // player's speed, width, height
-    float positionX, positionY;                                                            // player's current x and y positions
+    const float speed = 10;                                              // player's speed,
+    float width = GetScreenWidth() / 28, height = GetScreenHeight() / 5; // player's width, height
+    float positionX, positionY;                                          // player's current x and y positions
 
     void GetPosition(float x, float y); // setting up player's starting position
     void Draw();                        // drawing player
@@ -16,7 +17,7 @@ public:
 class Player2 : public Player1
 {
 public:
-    void GetPosition(float x, float y); 
+    void GetPosition(float x, float y);
     void Draw();
     void Move();
 };

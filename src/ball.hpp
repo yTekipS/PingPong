@@ -8,7 +8,6 @@ public:
     int player1_score = 0;  // left player score
     int player2_score = 0;  // right player score
 
-private:
     float speed_x = 10, speed_y = 10, radius = GetScreenHeight() / 24, positonX, positonY; // ball's x and y speed, radius, current x and y position
     Color c;                                                                               // ball's color
 
