@@ -4,19 +4,19 @@
 class Ball
 {
 public:
-    bool lastTouch = false;
-    int player1_score = 0;
-    int player2_score = 0;
+    bool lastTouch = false; // which player touch ball last
+    int player1_score = 0;  // left player score
+    int player2_score = 0;  // right player score
 
 private:
-    float speed_x = 10, speed_y = 10, radius = GetScreenHeight() / 24, positonX, positonY;
-    Color c;
+    float speed_x = 10, speed_y = 10, radius = GetScreenHeight() / 24, positonX, positonY; // ball's x and y speed, radius, current x and y position
+    Color c;                                                                               // ball's color
 
 public:
-    Ball(float x, float y, Color c);
-    void Move();
-    void Draw();
-    void Bounce();
-    void Reset();
-    void Chcek(float x, float y, float w, float h);
+    Ball(float x, float y, Color c);                // initializnig ball's parameters
+    void Move();                                    // moving ball
+    void Draw();                                    // drawing ball
+    void Bounce();                                  // ball bouncing of window borders and if point was scored
+    void Reset();                                   // reseting ball's position back to middle of the window
+    void Chcek(float x, float y, float w, float h); // chceking for collision with player
 };
