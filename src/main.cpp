@@ -50,7 +50,6 @@ int main(void)
 
             case GAME:
             {
-
                 ball.Move();
                 player1.Move();
                 player2.Move();
