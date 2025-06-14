@@ -10,6 +10,7 @@
                 "${workspaceFolder}\\src\\main.cpp",
                 "${workspaceFolder}\\src\\ball.cpp",
                 "${workspaceFolder}\\src\\player.cpp",
+                "${workspaceFolder}\\src\\button.cpp",
                 "-o",
                 "${workspaceFolder}\\out\\${fileBasenameNoExtension}.exe",
                 "-lraylib"    
