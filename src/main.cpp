@@ -28,17 +28,18 @@ int main(void)
     float screenWidth = 1280;
     float screenHeight = 720;
 
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE);
+    //* SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "Ping Pong Game"); // Initializing window
 
     SetTargetFPS(60);
 
-    Scene current_scene = GAME;
+    Scene current_scene = PASUE;
 
     Ball ball{screenWidth / 2, screenHeight / 2, colors.Yellow};
     Player1 player1;
     Player2 player2;
     Button pause{"../Assets/Pause.png", Vector2{screenWidth / 2, 0}, 1};
+    Button mainMenu;
     Button resume;
     Rectangle pasuseMenu{screenWidth * 0.3f, screenHeight / 8, screenWidth * 0.4f, screenHeight * 0.75f};
 
@@ -53,7 +54,7 @@ int main(void)
         //* UPDATE
         {
             //* HANDLING WINDOW RESIZING
-            if (IsWindowResized()) 
+            /*if (IsWindowResized())
             {
                 screenHeight = GetScreenHeight();
                 screenWidth = GetScreenWidth();
@@ -68,7 +69,7 @@ int main(void)
                 ball.positonY = screenHeight / 2;
                 pause.position = Vector2{screenWidth / 2, 0};
                 pasuseMenu = {screenWidth * 0.3f, screenHeight / 8, screenWidth * 0.4f, screenHeight * 0.75f};
-            }
+            }*/
             switch (current_scene)
             {
             case MAINMENU: // MAINMENU scene
@@ -152,7 +153,8 @@ int main(void)
                 DrawRectangle(0, 0, screenWidth, screenHeight, colors.Transparent);
                 DrawRectangleRounded(pasuseMenu, 0.2f, 80, colors.Pause);
                 DrawText("Pause", screenWidth * 0.3f + (screenWidth * 0.4f) / 5, screenHeight / 8 + (screenHeight * 0.75) / 10, 100, WHITE);
-                resume.Draw_Text("Resume", screenWidth * 0.3f, screenHeight / 2.7f, 80, screenWidth * 0.4f, screenHeight / 9);
+                resume.Drwa_Text_Centered("Resume", screenWidth * 0.3f, screenHeight / 2.7f, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
+                mainMenu.Drwa_Text_Centered("Main Menu", screenWidth * 0.3f, screenHeight / 2, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
             }
             break;
 

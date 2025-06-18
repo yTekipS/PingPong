@@ -27,11 +27,19 @@ void Button::Draw()
     DrawTextureV(texture, position, WHITE);
 }
 
-void Button::Draw_Text(const char *text, float x, float y, float size, float width, float height)
+void Button::Draw_Text(const char *text, float x, float y, float size, Color color, float width, float height)
 {
     rec = {x, y, width, height};
     DrawRectangle(x, y, width, height, Transparent);
-    DrawText(text, x + width / 4.5f, y, size, WHITE);
+    DrawText(text, x, y, size, WHITE);
+}
+
+void Button::Drwa_Text_Centered(const char *text, float x, float y, float size, Color color, float width, float height)
+{
+    CustomText cText;
+    rec = {x, y, width, height};
+    DrawRectangle(x, y, width, height, Transparent);
+    cText.DrawCentered(text, x, y, size, color, width);
 }
 
 bool Button::isPressed(bool mouseKeyPressed)
