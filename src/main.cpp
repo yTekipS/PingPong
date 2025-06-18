@@ -1,7 +1,4 @@
-#include <raylib.h>
-#include "ball.hpp"
-#include "player.hpp"
-#include "button.hpp"
+#include "connect.hpp"
 
 //* Game Scenes
 typedef enum Scene
