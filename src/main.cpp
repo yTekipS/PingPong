@@ -33,12 +33,12 @@ int main(void)
 
     SetTargetFPS(60);
 
-    Scene current_scene = PASUE;
+    Scene current_scene = GAME;
 
     Ball ball{screenWidth / 2, screenHeight / 2, colors.Yellow};
     Player1 player1;
     Player2 player2;
-    Button pause{"../Assets/Pause.png", Vector2{screenWidth / 2, 0}, 1};
+    Button pause;
     Button mainMenu;
     Button resume;
     Rectangle pasuseMenu{screenWidth * 0.3f, screenHeight / 8, screenWidth * 0.4f, screenHeight * 0.75f};
@@ -133,7 +133,7 @@ int main(void)
                 player2.Draw();                                                                                        // drawing right player
                 DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
                 DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
-                pause.Draw();                                                                                          // draw pause button
+                pause.DrawIMG_btn("../Assets/Pause.png", Vector2{screenWidth / 2, 0}, 1);                              // draw pause button
             }
             break;
 
@@ -148,13 +148,13 @@ int main(void)
                 player2.Draw();                                                                                        // drawing right player
                 DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
                 DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
-                pause.Draw();
+                pause.DrawIMG_btn("../Assets/Pause.png", Vector2{screenWidth / 2, 0}, 1);
                 // draw pasue button
                 DrawRectangle(0, 0, screenWidth, screenHeight, colors.Transparent);
                 DrawRectangleRounded(pasuseMenu, 0.2f, 80, colors.Pause);
                 DrawText("Pause", screenWidth * 0.3f + (screenWidth * 0.4f) / 5, screenHeight / 8 + (screenHeight * 0.75) / 10, 100, WHITE);
-                resume.Draw_Text_Centered("Resume", screenWidth * 0.3f, screenHeight / 2.7f, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
-                mainMenu.Draw_Text_Centered("Main Menu", screenWidth * 0.3f, screenHeight / 2, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
+                resume.Draw_Text_Centered_btn("Resume", screenWidth * 0.3f, screenHeight / 2.7f, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
+                mainMenu.Draw_Text_Centered_btn("Main Menu", screenWidth * 0.3f, screenHeight / 2, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
             }
             break;
 

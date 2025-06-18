@@ -1,6 +1,11 @@
 #include "button.hpp"
 
-Button::Button(const char *IMGpath, Vector2 IMGposition, float scale)
+Button::~Button()
+{
+    UnloadTexture(texture);
+}
+
+void Button::DrawIMG_btn(const char *IMGpath, Vector2 IMGposition, float scale)
 {
     position = IMGposition;
     Image image = LoadImage(IMGpath);
@@ -11,35 +16,22 @@ Button::Button(const char *IMGpath, Vector2 IMGposition, float scale)
     position.x -= width / 2;
     texture = LoadTextureFromImage(image);
     UnloadImage(image);
-}
-
-Button::Button()
-{
-}
-
-Button::~Button()
-{
-    UnloadTexture(texture);
-}
-
-void Button::Draw()
-{
     DrawTextureV(texture, position, WHITE);
 }
 
-void Button::Draw_Text(const char *text, float x, float y, float size, Color color, float width, float height)
+void Button::Draw_Text_btn(const char *text, float x, float y, float size, Color color, float width, float height)
 {
     rec = {x, y, width, height};
     DrawRectangle(x, y, width, height, Transparent);
-    DrawText(text, x, y, size, WHITE);
+    DrawText(text, x, y, size, color);
 }
 
-void Button::Draw_Text_Centered(const char *text, float x, float y, float size, Color color, float width, float height)
+void Button::Draw_Text_Centered_btn(const char *text, float x, float y, float size, Color color, float width, float height)
 {
     CustomText cText;
     rec = {x, y, width, height};
     DrawRectangle(x, y, width, height, Transparent);
-    cText.DrawCentered(text, x, y, size, color, width);
+    cText.DrawCentered_DEFAULT(text, x, y, size, color, width);
 }
 
 bool Button::isPressed(bool mouseKeyPressed)
