@@ -153,8 +153,8 @@ int main(void)
                 DrawRectangle(0, 0, screenWidth, screenHeight, colors.Transparent);
                 DrawRectangleRounded(pasuseMenu, 0.2f, 80, colors.Pause);
                 DrawText("Pause", screenWidth * 0.3f + (screenWidth * 0.4f) / 5, screenHeight / 8 + (screenHeight * 0.75) / 10, 100, WHITE);
-                resume.Drwa_Text_Centered("Resume", screenWidth * 0.3f, screenHeight / 2.7f, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
-                mainMenu.Drwa_Text_Centered("Main Menu", screenWidth * 0.3f, screenHeight / 2, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
+                resume.Draw_Text_Centered("Resume", screenWidth * 0.3f, screenHeight / 2.7f, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
+                mainMenu.Draw_Text_Centered("Main Menu", screenWidth * 0.3f, screenHeight / 2, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
             }
             break;
 

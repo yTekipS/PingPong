@@ -34,7 +34,7 @@ void Button::Draw_Text(const char *text, float x, float y, float size, Color col
     DrawText(text, x, y, size, WHITE);
 }
 
-void Button::Drwa_Text_Centered(const char *text, float x, float y, float size, Color color, float width, float height)
+void Button::Draw_Text_Centered(const char *text, float x, float y, float size, Color color, float width, float height)
 {
     CustomText cText;
     rec = {x, y, width, height};

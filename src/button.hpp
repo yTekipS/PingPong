@@ -14,6 +14,6 @@ public:
     ~Button();                                                                                                       // unloading texture
     void Draw();                                                                                                     // drawing button
     void Draw_Text(const char *text, float x, float y, float size, Color color, float width, float height);          // draw clickable text
-    void Drwa_Text_Centered(const char *text, float x, float y, float size, Color color, float width, float height); // draw clickable text centered x axis or both axis
+    void Draw_Text_Centered(const char *text, float x, float y, float size, Color color, float width, float height); // draw clickable text centered x axis or both axis
     bool isPressed(bool mouseKeyPressed);                                                                            // checking if button was pressed
 };
