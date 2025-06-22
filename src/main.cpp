@@ -4,7 +4,8 @@
 typedef enum Scene
 {
     MAINMENU = 0,
-    GAME,
+    LOCAL,
+    AI_GAME,
     PASUE,
 } Scene;
 
@@ -24,25 +25,30 @@ int main(void)
 {
     float screenWidth = 1280;
     float screenHeight = 720;
-
+    bool local = true;
     //* SetConfigFlags(FLAG_WINDOW_RESIZABLE);
-    InitWindow(screenWidth, screenHeight, "Ping Pong Game"); // Initializing window
+    InitWindow(screenWidth, screenHeight, "Ping Pong"); // Initializing window
 
     SetTargetFPS(60);
 
-    Scene current_scene = GAME;
+    Scene current_scene = MAINMENU;
 
     Ball ball{screenWidth / 2, screenHeight / 2, colors.Yellow};
     Player1 player1;
     Player2 player2;
-    Button pause;
-    Button mainMenu;
+    AI ai;
+    ai.GetBall(&ball);
+    Button pause{"../Assets/Pause.png", 1};
+    Button ToMainMenu;
     Button resume;
     Rectangle pasuseMenu{screenWidth * 0.3f, screenHeight / 8, screenWidth * 0.4f, screenHeight * 0.75f};
+    // main menu
+    Button PlayTwoPlayer;
+    Button PlayAi;
+    Button GameSettings;
+    CustomText Title;
 
-    // Setting up starting positions for both players
-    player1.GetPosition(0, screenHeight / 2);
-    player2.GetPosition(screenWidth, screenHeight / 2);
+    // Setting up starting positions for both players and AI
 
     //* MAIN GAME LOOP
 
@@ -50,45 +56,65 @@ int main(void)
     {
         //* UPDATE
         {
-            //* HANDLING WINDOW RESIZING
-            /*if (IsWindowResized())
-            {
-                screenHeight = GetScreenHeight();
-                screenWidth = GetScreenWidth();
-                player1.GetPosition(0, screenHeight / 2);
-                player1.width = screenWidth / 28;
-                player1.height = screenHeight / 5;
-                player2.GetPosition(screenWidth, screenHeight / 2);
-                player2.width = screenWidth / 28;
-                player2.height = screenHeight / 5;
-                ball.radius = screenHeight / 24;
-                ball.positonX = screenWidth / 2;
-                ball.positonY = screenHeight / 2;
-                pause.position = Vector2{screenWidth / 2, 0};
-                pasuseMenu = {screenWidth * 0.3f, screenHeight / 8, screenWidth * 0.4f, screenHeight * 0.75f};
-            }*/
             switch (current_scene)
             {
             case MAINMENU: // MAINMENU scene
             {
+                if (PlayTwoPlayer.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)))
+                {
+                    current_scene = LOCAL;
+                    local = true;
+                    player1.GetPosition(0, screenHeight / 2);
+                    player2.GetPosition(screenWidth, screenHeight / 2);
+                    ai.GetPosition(screenWidth, screenHeight / 2);
+                }
+                if (PlayAi.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)))
+                {
+                    current_scene = AI_GAME;
+                    local = false;
+                    player1.GetPosition(0, screenHeight / 2);
+                    player2.GetPosition(screenWidth, screenHeight / 2);
+                    ai.GetPosition(screenWidth, screenHeight / 2);
+                }
             }
             break;
 
-            case GAME: // GAME scene
+            case LOCAL: // GAME scene
             {
                 ball.Move();
                 player1.Move();
                 player2.Move();
                 if (ball.lastTouch) // checking for collison with left player (player 1)
                 {
-                    ball.Chcek(player1.positionX, player1.positionY, player1.width, player1.height);
+                    ball.Check(player1.positionX, player1.positionY, player1.width, player1.height);
                 }
                 if (!ball.lastTouch) // checking for collsion with right player (player 2)
                 {
-                    ball.Chcek(player2.positionX, player2.positionY, player2.width, player2.height);
+                    ball.Check(player2.positionX, player2.positionY, player2.width, player2.height);
                 }
 
-                if (pause.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE)) // chceking if pause button/key is pressed
+                if (pause.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE)) // checking if pause button/key is pressed
+                {
+                    current_scene = PASUE;
+                }
+            }
+            break;
+
+            case AI_GAME:
+            {
+                ball.Move();
+                player1.Move();
+                ai.Move();
+                if (ball.lastTouch) // checking for collison with left player (player 1)
+                {
+                    ball.Check(player1.positionX, player1.positionY, player1.width, player1.height);
+                }
+                if (!ball.lastTouch) // checking for collsion with right player (player 2)
+                {
+                    ball.Check(ai.positionX, ai.positionY, ai.width, ai.height);
+                }
+
+                if (pause.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE)) // checking if pause button/key is pressed
                 {
                     current_scene = PASUE;
                 }
@@ -97,9 +123,23 @@ int main(void)
 
             case PASUE: // PASUE active
             {
-                if (resume.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE)) // chceking if pause button/key is pressed
+                if (resume.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) || IsKeyPressed(KEY_SPACE)) // checking if pause button/key is pressed
                 {
-                    current_scene = GAME;
+                    current_scene = local ? LOCAL : AI_GAME;
+                }
+                if (ToMainMenu.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT))) // checking if main menu button is pressed
+                {
+                    current_scene = MAINMENU;
+                    player1.GetPosition(0, screenHeight / 2);
+                    player2.GetPosition(screenWidth, screenHeight / 2);
+                    ai.GetPosition(screenWidth, screenHeight / 2);
+                    ball.player1_score = 0;
+                    ball.player2_score = 0;
+                    ball.positonX = screenWidth/2;
+                    ball.positonY = screenHeight/2;
+                    ball.lastTouch = true;
+                    ball.speed_x = -10;
+                    ball.speed_y = 10; 
                 }
             }
             break;
@@ -117,9 +157,18 @@ int main(void)
             {
             case MAINMENU: // MAINMENU scene
             {
+                ClearBackground(colors.Green);                                                      // background
+                DrawRectangle(0, 0, screenWidth / 2, screenHeight, colors.DarkGreen);               // left half of the table
+                DrawCircle(screenWidth / 2, screenHeight / 2, screenHeight / 6, colors.LightGreen); // circle in the middle
+                DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, LIGHTGRAY);             // net
+                // draw Main Menu
+                DrawRectangle(0, 0, screenWidth, screenHeight, colors.Transparent);
+                Title.DrawCentered_DEFAULT("Ping Pong", screenWidth / 2, 0, 150, WHITE);
+                PlayTwoPlayer.Draw_Text_Centered_btn("Play local", screenWidth / 2.7f, 230, 100, WHITE, screenWidth / 4, screenHeight / 9);
+                PlayAi.Draw_Text_Centered_btn("Play with bot", screenWidth / 2.7f, 360, 100, WHITE, screenWidth / 4, screenHeight / 9);
             }
             break;
-            case GAME: // GAME scene
+            case LOCAL: // GAME scene
             {
                 ClearBackground(colors.Green);                                                                         // background
                 DrawRectangle(0, 0, screenWidth / 2, screenHeight, colors.DarkGreen);                                  // left half of the table
@@ -130,28 +179,50 @@ int main(void)
                 player2.Draw();                                                                                        // drawing right player
                 DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
                 DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
-                pause.DrawIMG_btn("../Assets/Pause.png", Vector2{screenWidth / 2, 0}, 1);                              // draw pause button
+                pause.DrawIMG_btn(Vector2{screenWidth / 2, 0}, 1);                                                     // draw pause button
+            }
+            break;
+
+            case AI_GAME:
+            {
+                ClearBackground(colors.Green);                                                                         // background
+                DrawRectangle(0, 0, screenWidth / 2, screenHeight, colors.DarkGreen);                                  // left half of the table
+                DrawCircle(screenWidth / 2, screenHeight / 2, screenHeight / 6, colors.LightGreen);                    // circle in the middle
+                DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, LIGHTGRAY);                                // net
+                ball.Draw();                                                                                           // drawing ball
+                player1.Draw();                                                                                        // drawing left player
+                ai.Draw();                                                                                             // drawing right player
+                DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
+                DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
+                pause.DrawIMG_btn(Vector2{screenWidth / 2, 0}, 1);                                                     // draw pause button
             }
             break;
 
             case PASUE:
             {
-                ClearBackground(colors.Green);                                                                         // background
-                DrawRectangle(0, 0, screenWidth / 2, screenHeight, colors.DarkGreen);                                  // left half of the table
-                DrawCircle(screenWidth / 2, screenHeight / 2, screenHeight / 6, colors.LightGreen);                    // circle in the middle
-                DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, LIGHTGRAY);                                // net
-                ball.Draw();                                                                                           // drawing ball
-                player1.Draw();                                                                                        // drawing left player
-                player2.Draw();                                                                                        // drawing right player
+                ClearBackground(colors.Green);                                                      // background
+                DrawRectangle(0, 0, screenWidth / 2, screenHeight, colors.DarkGreen);               // left half of the table
+                DrawCircle(screenWidth / 2, screenHeight / 2, screenHeight / 6, colors.LightGreen); // circle in the middle
+                DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, LIGHTGRAY);             // net
+                ball.Draw();                                                                        // drawing ball
+                player1.Draw();                                                                     // drawing left player
+                if (local)
+                {
+                    player2.Draw(); // drawing right player
+                }
+                else
+                {
+                    ai.Draw(); // drawing right player
+                }
                 DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
                 DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
-                pause.DrawIMG_btn("../Assets/Pause.png", Vector2{screenWidth / 2, 0}, 1);
-                // draw pasue button
+                pause.DrawIMG_btn(Vector2{screenWidth / 2, 0}, 1);                                                     // draw pasue button
+                // draw pause menu
                 DrawRectangle(0, 0, screenWidth, screenHeight, colors.Transparent);
                 DrawRectangleRounded(pasuseMenu, 0.2f, 80, colors.Pause);
                 DrawText("Pause", screenWidth * 0.3f + (screenWidth * 0.4f) / 5, screenHeight / 8 + (screenHeight * 0.75) / 10, 100, WHITE);
                 resume.Draw_Text_Centered_btn("Resume", screenWidth * 0.3f, screenHeight / 2.7f, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
-                mainMenu.Draw_Text_Centered_btn("Main Menu", screenWidth * 0.3f, screenHeight / 2, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
+                ToMainMenu.Draw_Text_Centered_btn("Main Menu", screenWidth * 0.3f, screenHeight / 2, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
             }
             break;
 

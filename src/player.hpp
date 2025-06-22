@@ -1,6 +1,6 @@
 #pragma once
 #include <raylib.h>
-
+#include "ball.hpp"
 class Player1
 {
 public:
@@ -17,7 +17,15 @@ public:
 class Player2 : public Player1
 {
 public:
+    void Move();
     void GetPosition(float x, float y);
-    void Draw();
+};
+
+class AI : public Player1
+{
+public:
+    Ball *ball;
+    void GetBall(Ball *ball);
+    void GetPosition(float x, float y);
     void Move();
 };

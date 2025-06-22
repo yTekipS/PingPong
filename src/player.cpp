@@ -35,16 +35,10 @@ void Player1::Limit()
         positionY = GetScreenHeight() - height;
     }
 }
-
 void Player2::GetPosition(float x, float y)
 {
     this->positionX = x - width - width / 3;
     this->positionY = y - height / 2;
-}
-
-void Player2::Draw()
-{
-    DrawRectangleRounded(Rectangle{positionX, positionY, width, height}, 0.3, 80, WHITE);
 }
 
 void Player2::Move()
@@ -54,6 +48,30 @@ void Player2::Move()
         this->positionY -= speed;
     }
     else if (IsKeyDown(KEY_DOWN))
+    {
+        this->positionY += speed;
+    }
+    Limit();
+}
+
+void AI::GetBall(Ball *ball)
+{
+    this->ball = ball;
+}
+
+void AI::GetPosition(float x, float y)
+{
+    this->positionX = x - width - width / 3;
+    this->positionY = y - height / 2;
+}
+
+void AI::Move()
+{
+    if (ball->positonY > this->positionY + this->height / 2)
+    {
+        this->positionY -= speed;
+    }
+    if (ball->positonY <= this->positionY + this->height / 2)
     {
         this->positionY += speed;
     }

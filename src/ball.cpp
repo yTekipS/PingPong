@@ -43,7 +43,7 @@ void Ball::Reset()
     positonY = GetScreenHeight() / 2;
 }
 
-void Ball::Chcek(float x, float y, float w, float h)
+void Ball::Check(float x, float y, float w, float h)
 {
     if (CheckCollisionCircleRec(Vector2{positonX, positonY}, radius, Rectangle{x, y, w, h}))
     {
