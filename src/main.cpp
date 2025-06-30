@@ -1,5 +1,4 @@
 #include "connect.hpp"
-
 //* Game Scenes
 typedef enum Scene
 {
@@ -7,6 +6,7 @@ typedef enum Scene
     LOCAL,
     AI_GAME,
     PASUE,
+    SETTINGS
 } Scene;
 
 //* Few colors
@@ -46,7 +46,12 @@ int main(void)
     Button PlayTwoPlayer;
     Button PlayAi;
     Button GameSettings;
+    Button Modules{"../Assets/Gear.png", 1};
     CustomText Title;
+    CustomText Settings;
+    CustomText Accelerate;
+    Button accel{"../Assets/Star.png", 0.8f};
+    Button GoBack;
 
     // Setting up starting positions for both players and AI
 
@@ -75,6 +80,10 @@ int main(void)
                     player1.GetPosition(0, screenHeight / 2);
                     player2.GetPosition(screenWidth, screenHeight / 2);
                     ai.GetPosition(screenWidth, screenHeight / 2);
+                }
+                if (Modules.isPressed(IsMouseButtonPressed(MOUSE_LEFT_BUTTON)))
+                {
+                    current_scene = SETTINGS;
                 }
             }
             break;
@@ -135,11 +144,32 @@ int main(void)
                     ai.GetPosition(screenWidth, screenHeight / 2);
                     ball.player1_score = 0;
                     ball.player2_score = 0;
-                    ball.positonX = screenWidth/2;
-                    ball.positonY = screenHeight/2;
+                    ball.positonX = screenWidth / 2;
+                    ball.positonY = screenHeight / 2;
                     ball.lastTouch = true;
                     ball.speed_x = -10;
-                    ball.speed_y = 10; 
+                    ball.speed_y = 10;
+                }
+            }
+            break;
+
+            case SETTINGS:
+            {
+                if (accel.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)))
+                {
+                    ball.accelerate = !ball.accelerate;
+                    if (ball.accelerate)
+                    {
+                        accel.ImgChange("../Assets/BlackStar.png", 0.8f);
+                    }
+                    else if (!ball.accelerate)
+                    {
+                        accel.ImgChange("../Assets/Star.png", 0.8f);
+                    }
+                }
+                if (GoBack.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)))
+                {
+                    current_scene = MAINMENU;
                 }
             }
             break;
@@ -164,6 +194,7 @@ int main(void)
                 // draw Main Menu
                 DrawRectangle(0, 0, screenWidth, screenHeight, colors.Transparent);
                 Title.DrawCentered_DEFAULT("Ping Pong", screenWidth / 2, 0, 150, WHITE);
+                Modules.DrawIMG_btn(Vector2{static_cast<float>(Modules.imgWidth) / 2, screenHeight - Modules.imgHeight});
                 PlayTwoPlayer.Draw_Text_Centered_btn("Play local", screenWidth / 2.7f, 230, 100, WHITE, screenWidth / 4, screenHeight / 9);
                 PlayAi.Draw_Text_Centered_btn("Play with bot", screenWidth / 2.7f, 360, 100, WHITE, screenWidth / 4, screenHeight / 9);
             }
@@ -179,7 +210,7 @@ int main(void)
                 player2.Draw();                                                                                        // drawing right player
                 DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
                 DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
-                pause.DrawIMG_btn(Vector2{screenWidth / 2, 0}, 1);                                                     // draw pause button
+                pause.DrawIMG_btn(Vector2{screenWidth / 2, 0});                                                        // draw pause button
             }
             break;
 
@@ -194,7 +225,7 @@ int main(void)
                 ai.Draw();                                                                                             // drawing right player
                 DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
                 DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
-                pause.DrawIMG_btn(Vector2{screenWidth / 2, 0}, 1);                                                     // draw pause button
+                pause.DrawIMG_btn(Vector2{screenWidth / 2, 0});                                                        // draw pause button
             }
             break;
 
@@ -216,13 +247,28 @@ int main(void)
                 }
                 DrawText(TextFormat("%i", ball.player1_score), screenWidth / 4 - 40, 30, screenHeight / 7, WHITE);     // left player score
                 DrawText(TextFormat("%i", ball.player2_score), screenWidth * 0.75f - 40, 30, screenHeight / 7, WHITE); // right player score
-                pause.DrawIMG_btn(Vector2{screenWidth / 2, 0}, 1);                                                     // draw pasue button
+                pause.DrawIMG_btn(Vector2{screenWidth / 2, 0});                                                        // draw pasue button
                 // draw pause menu
                 DrawRectangle(0, 0, screenWidth, screenHeight, colors.Transparent);
                 DrawRectangleRounded(pasuseMenu, 0.2f, 80, colors.Pause);
                 DrawText("Pause", screenWidth * 0.3f + (screenWidth * 0.4f) / 5, screenHeight / 8 + (screenHeight * 0.75) / 10, 100, WHITE);
                 resume.Draw_Text_Centered_btn("Resume", screenWidth * 0.3f, screenHeight / 2.7f, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
                 ToMainMenu.Draw_Text_Centered_btn("Main Menu", screenWidth * 0.3f, screenHeight / 2, 80, WHITE, screenWidth * 0.4f, screenHeight / 9);
+            }
+            break;
+
+            case SETTINGS:
+            {
+                ClearBackground(colors.Green);                                                      // background
+                DrawRectangle(0, 0, screenWidth / 2, screenHeight, colors.DarkGreen);               // left half of the table
+                DrawCircle(screenWidth / 2, screenHeight / 2, screenHeight / 6, colors.LightGreen); // circle in the middle
+                DrawLine(screenWidth / 2, 0, screenWidth / 2, screenHeight, LIGHTGRAY);             // net
+                DrawRectangle(0, 0, screenWidth, screenHeight, colors.Transparent);
+                DrawRectangleRounded(pasuseMenu, 0.2f, 80, colors.Pause);
+                Settings.DrawCentered_DEFAULT("Settings", screenWidth / 2, screenHeight / 8 + (screenHeight * 0, 75) / 10, 100, WHITE);
+                Accelerate.DrawCentered_DEFAULT("Ball accelerates", screenWidth / 2.2f, screenHeight / 8 + screenHeight / 5, 30, WHITE);
+                accel.DrawIMG_btn(Vector2{screenWidth / 2.2f + 160, screenHeight / 8 + screenHeight / 5.3f});
+                GoBack.Draw_Text_Centered_btn("Go Back", screenWidth/3.35f, screenHeight*7/8 - 80, 80, WHITE, screenWidth * 0.4f, 80);
             }
             break;
 

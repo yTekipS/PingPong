@@ -14,13 +14,13 @@ Button::Button(const char *IMGpath, float scale)
     this->IMGpath = IMGpath;
     image = LoadImage(IMGpath);
     imgWidth = image.width * scale;
-    int height = image.height * scale;
-    ImageResize(&image, imgWidth, height);
+    imgHeight = image.height * scale;
+    ImageResize(&image, imgWidth, imgHeight);
     texture = LoadTextureFromImage(image);
     UnloadImage(image);
 }
 
-void Button::DrawIMG_btn(Vector2 IMGposition, float scale)
+void Button::DrawIMG_btn(Vector2 IMGposition)
 {
     position = IMGposition;
     position.x -= imgWidth / 2;
@@ -50,4 +50,15 @@ bool Button::isPressed(bool mouseKeyPressed)
         return true;
     }
     return false;
+}
+
+void Button::ImgChange(const char *path, float scale)
+{
+    this->IMGpath = path;
+    image = LoadImage(IMGpath);
+    imgWidth = image.width * scale;
+    imgHeight = image.height * scale;
+    ImageResize(&image, imgWidth, imgHeight);
+    texture = LoadTextureFromImage(image);
+    UnloadImage(image);
 }

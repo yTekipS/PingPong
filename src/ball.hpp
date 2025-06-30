@@ -10,6 +10,7 @@ public:
 
     float speed_x = -10, speed_y = 10, radius = GetScreenHeight() / 24, positonX, positonY; // ball's x and y speed, radius, current x and y position
     Color c;                                                                               // ball's color
+    bool accelerate = false;
 
 public:
     Ball(float x, float y, Color c);                // initializnig ball's parameters
