@@ -29,7 +29,7 @@ int main(void)
     //* SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "Ping Pong"); // Initializing window
     SetExitKey(KEY_NULL); // Disable default ESC quit key
-
+    TraceLog(LOG_INFO, "Working Directory: %s", GetWorkingDirectory());
     SetTargetFPS(60);
 
     Scene current_scene = MAINMENU;
@@ -39,7 +39,7 @@ int main(void)
     Player2 player2;
     AI ai;
     ai.GetBall(&ball);
-    Button pause{"../Assets/Pause.png", 1};
+    Button pause{"Assets/Pause.png", 1};
     Button ToMainMenu;
     Button resume;
     Rectangle pasuseMenu{screenWidth * 0.3f, screenHeight / 8, screenWidth * 0.4f, screenHeight * 0.75f};
@@ -47,11 +47,11 @@ int main(void)
     Button PlayTwoPlayer;
     Button PlayAi;
     Button GameSettings;
-    Button Modules{"../Assets/Gear.png", 1};
+    Button Modules{"Assets/Gear.png", 1};
     CustomText Title;
     CustomText Settings;
     CustomText Accelerate;
-    Button accel{"../Assets/Star.png", 0.8f};
+    Button accel{"Assets/Star.png", 0.8f};
     Button GoBack;
 
     // Setting up starting positions for both players and AI
@@ -161,11 +161,11 @@ int main(void)
                     ball.accelerate = !ball.accelerate;
                     if (ball.accelerate)
                     {
-                        accel.ImgChange("../Assets/BlackStar.png", 0.8f);
+                        accel.ImgChange("Assets/BlackStar.png", 0.8f);
                     }
                     else if (!ball.accelerate)
                     {
-                        accel.ImgChange("../Assets/Star.png", 0.8f);
+                        accel.ImgChange("Assets/Star.png", 0.8f);
                     }
                 }
                 if (GoBack.isPressed(IsMouseButtonPressed(MOUSE_BUTTON_LEFT)))
