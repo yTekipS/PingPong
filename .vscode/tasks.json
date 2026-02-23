@@ -5,16 +5,21 @@
             "label": "C/C++: g++.exe build active file",
             "command": "C:\\msys64\\mingw64\\bin\\g++.exe",
             "args": [
-                "-fdiagnostics-color=always",
-                "-g",
                 "${workspaceFolder}\\src\\main.cpp",
                 "${workspaceFolder}\\src\\ball.cpp",
-                "${workspaceFolder}\\src\\player.cpp",
                 "${workspaceFolder}\\src\\button.cpp",
                 "${workspaceFolder}\\src\\customText.cpp",
+                "${workspaceFolder}\\src\\player.cpp",
+                "-Isrc",
+                "-IC:\\msys64\\mingw64\\include",
                 "-o",
-                "${workspaceFolder}\\out\\${fileBasenameNoExtension}.exe",
-                "-lraylib"    
+                "${workspaceFolder}\\game.exe",
+                "-lraylib",
+                "-lopengl32",
+                "-lgdi32",
+                "-lwinmm",
+                "-L",
+                "C:\\msys64\\mingw64\\lib"
             ],
             "options": {
                 "cwd": "${fileDirname}"
