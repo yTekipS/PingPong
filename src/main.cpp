@@ -28,6 +28,7 @@ int main(void)
     bool local = true;
     //* SetConfigFlags(FLAG_WINDOW_RESIZABLE);
     InitWindow(screenWidth, screenHeight, "Ping Pong"); // Initializing window
+    SetExitKey(KEY_NULL); // Disable default ESC quit key
 
     SetTargetFPS(60);
 

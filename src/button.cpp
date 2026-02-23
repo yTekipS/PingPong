@@ -13,6 +13,11 @@ Button::Button(const char *IMGpath, float scale)
 {
     this->IMGpath = IMGpath;
     image = LoadImage(IMGpath);
+    if (image.data == nullptr)
+    {
+        TraceLog(LOG_ERROR, "Failed to load image: %s", IMGpath);
+        return;
+    }
     imgWidth = image.width * scale;
     imgHeight = image.height * scale;
     ImageResize(&image, imgWidth, imgHeight);
